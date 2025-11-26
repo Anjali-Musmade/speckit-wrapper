@@ -1,0 +1,8 @@
+\
+        # Example step to call the wrapper from an Azure Pipeline
+        - script: |
+            curl -X POST https://YOUR-RENDER-URL/run \
+              -H "Content-Type: application/json" \
+              -d '{"tool":"specify","prompt":"Generate full specification","repo_url":"https://$GITHUB_PAT@github.com/your/repo.git","repo_branch":"main","repo_path":"specs","auto_commit":true}' \
+              > speckit_response.json
+          displayName: "Call Speckit Wrapper"
