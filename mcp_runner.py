@@ -1,15 +1,17 @@
 import subprocess
 import asyncio
 import time
-from mcp import MCP
+
+from mcp.client.stdio import StdioClient
+
 
 async def run_speckit_tool(tool: str, prompt: str = None):
     """
-    Starts spec-kit-mcp using a subprocess, connects as an MCP client,
-    calls the requested tool, and returns the JSON result.
+    Launch spec-kit-mcp, connect using the modern MCP StdioClient,
+    execute the tool, return results.
     """
 
-    # Start the MCP server
+    # Start MCP server
     proc = subprocess.Popen(
         ["spec-kit-mcp"],
         stdin=subprocess.PIPE,
@@ -18,18 +20,25 @@ async def run_speckit_tool(tool: str, prompt: str = None):
         text=True
     )
 
-    # Wait for server to start
+    # Small delay to ensure server initializes
     time.sleep(2)
 
-    # Connect to MCP server
-    mcp = MCP()
-    await mcp.start(stdio=(proc.stdin, proc.stdout))
+    # Connect via STDIO
+    client = StdioClient(
+        proc.stdin,
+        proc.stdout,
+        name="speckit-wrapper",
+        version="1.0"
+    )
+    await client.start()
 
-    # Run tool
+    # Prepare params
     params = {"prompt": prompt} if prompt else {}
-    result = await mcp.call_tool(tool, params)
 
-    # Shutdown
+    # Call tool
+    result = await client.call_tool(tool, params)
+
+    # Cleanup
     try:
         proc.kill()
     except:
