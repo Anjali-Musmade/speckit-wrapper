@@ -21,9 +21,9 @@ async def run_tool(req: SpeckitRequest):
 
     # If results include files and user asked for commit
     if req.auto_commit and req.repo_url and req.repo_path:
-    commit_res = auto_commit(req.repo_url, req.repo_branch, req.repo_path, result.get("files", []))
+        commit_res = auto_commit(req.repo_url, req.repo_branch, req.repo_path, result.get("files", []))
     else:
-    commit_res = None
+        commit_res = None
     return {
         "status": "success",
         "tool": req.tool,
