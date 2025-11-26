@@ -1,7 +1,6 @@
-\
-        services:
-          - type: web
-            name: speckit-wrapper
-            env: docker
-            plan: free
-            autoDeploy: true
+services:
+  - type: web
+    name: speckit-wrapper
+    env: docker
+    plan: free
+    autoDeploy: true

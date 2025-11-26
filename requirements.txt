@@ -1,6 +1,5 @@
-\
-        fastapi
-        uvicorn
-        mcp
-        gitpython
-        pydantic
+fastapi
+uvicorn
+mcp
+gitpython
+pydantic
